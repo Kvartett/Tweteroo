@@ -22,15 +22,18 @@ app.post("/tweets", (req, res) => {
 })
 
 app.get('/tweets', (req, res) => {
-    const page = parseInt(req.query.page);
-    let i = 10 * (page - 1);
-    const totalTweets = 10 * (page - 1) + 10;
-    let showtweets = [];
-    while (i < totalTweets && tweets[i] !== undefined) {
-        showtweets.push(tweets[i]);
-        i++;
-    }
+    let qntTweets = 10;
+    let showtweets = tweets.slice(-qntTweets)
+    showtweets = showtweets.map((tweet) => {
+        return {
+            username: tweet.username,
+            avatar: users.find((user) => user.username === tweet.username).avatar,
+            tweet: tweet.tweet
+        }
+    })
     res.send(showtweets);
-})
+}),
 
-app.listen(5000)
+    app.listen(5000, () => {
+        console.log("Starting server!")
+    })
